@@ -50,11 +50,11 @@ const ListSectionSelector = styled.div`
 
   @media ${({ theme }) => theme.mediaMin.splitCenter} {
     flex-direction: row;
-    grid-gap: 0px;
+    grid-gap: 50px;
   }
 
   @media ${({ theme }) => theme.mediaMin.tablet} {
-    grid-gap: 40px;
+    grid-gap: 80px;
   }
 `
 
@@ -120,7 +120,7 @@ const Navbar = ({ location }) => {
   return (
     <RowStyled>
       <NavbarContainer>
-        <Logo href="/">Abacus</Logo>
+        <Logo href="/">$ABC</Logo>
         <MobileNavButton onClick={() => setMenuOpen((open) => !open)}>
           {menuOpen ? <X /> : <Menu />}
         </MobileNavButton>
@@ -131,35 +131,21 @@ const Navbar = ({ location }) => {
               href="/"
               active={(location.pathname === "/").toString()}
             >
-              Explore
+              Earnings
             </HeaderLink>
             <HeaderLink
               as="a"
-              href="/auction"
-              active={location.pathname.includes("/auction").toString()}
+              href="/whitelist"
+              active={location.pathname.includes("/whitelist").toString()}
             >
-              Auction
+              Whitelist
             </HeaderLink>
             <HeaderLink
               as="a"
-              href="/my-sessions"
-              active={location.pathname.includes("/my-sessions").toString()}
+              href="/exchange"
+              active={location.pathname.includes("/exchange").toString()}
             >
-              My Sessions
-            </HeaderLink>
-            <HeaderLink
-              as="a"
-              href="/claim-pool"
-              active={location.pathname.includes("/claim-pool").toString()}
-            >
-              Claim & Deposit
-            </HeaderLink>
-            <HeaderLink
-              as="a"
-              href="/legacy"
-              active={location.pathname.includes("/legacy").toString()}
-            >
-              Legacy
+              Exchange
             </HeaderLink>
           </ListSection>
           <ListSectionSelector>

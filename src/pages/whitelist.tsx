@@ -1,10 +1,10 @@
 import GlobalLayout from "@layouts/index"
-import Earnings from "@sections/Earnings"
+import Whitelist from "@sections/Whitelist"
 import React from "react"
 
 const IndexPage = (props: any) => (
   <GlobalLayout {...props}>
-    <Earnings />
+    <Whitelist />
   </GlobalLayout>
 )
 
