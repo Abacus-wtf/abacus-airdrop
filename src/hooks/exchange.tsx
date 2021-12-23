@@ -26,6 +26,7 @@ export const useOnExchange = () => {
         account
       )
       console.log(amount)
+      console.log(amount)
       method = pricingSessionContract.claimProfitsEarned
       estimate = pricingSessionContract.estimateGas.claimProfitsEarned
       args = []
