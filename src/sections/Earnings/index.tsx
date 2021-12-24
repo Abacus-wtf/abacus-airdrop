@@ -4,10 +4,13 @@ import { HorizontalListGroup } from "@components/ListGroupMods"
 import { ListGroupItem } from "shards-react"
 import { InputWithTitle } from "@components/Input"
 import { useOnEarn } from "@hooks/earnings"
-import { useActiveWeb3React } from "@hooks/index"
+import { useActiveWeb3React, useWeb3Contract } from "@hooks/index"
 import { SmallUniversalContainer, Title } from "@components/global.styles"
 import ConnectWalletAlert from "@components/ConnectWalletAlert"
 import styled from "styled-components"
+import { ARB_ABC_PRESALE } from "@config/constants"
+import ABC_PRESALE_ABI from "@config/contracts/ABC_PRESALE_ABI.json"
+import { formatEther } from "ethers/lib/utils"
 
 export const VerticalContainer = styled.div`
   display: flex;
@@ -26,19 +29,22 @@ const Earnings: FunctionComponent = () => {
   const { account } = useActiveWeb3React()
   const [earningsVal, setEarningsVal] = useState("")
   const [isLoading, setLoading] = useState(false)
+  const getPresaleContract = useWeb3Contract(ABC_PRESALE_ABI)
 
   const { onEarn, isPending } = useOnEarn()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
-      setEarningsVal("5")
+      const presaleRead = getPresaleContract(ARB_ABC_PRESALE)
+      const earned = await presaleRead.methods.won(account).call()
+      setEarningsVal(formatEther(earned))
       setLoading(false)
     }
     if (account !== undefined && account !== null && earningsVal === "") {
       loadData()
     }
-  }, [account])
+  }, [account, getPresaleContract])
 
   if (!account) {
     return (
@@ -67,7 +73,7 @@ const Earnings: FunctionComponent = () => {
         <HorizontalListGroup>
           <MaxWidthItem>
             <InputWithTitle
-              title="Earnings"
+              title="Earnings ($ABC)"
               id="earnings"
               placeholder="0"
               value={earningsVal}
@@ -83,7 +89,7 @@ const Earnings: FunctionComponent = () => {
                 style={{ width: "100%" }}
                 type="button"
                 onClick={() => {
-                  onEarn()
+                  onEarn(earningsVal)
                 }}
               >
                 {isPending ? "Pending..." : "Claim Airdrop"}

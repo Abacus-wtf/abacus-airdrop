@@ -92,6 +92,10 @@ export const ARB_ABC_PRICING_SESSION_ADDRESS_LEGACY = IS_PRODUCTION
   ? "0xB07E1a1383F705898ef01E3ba5Aba75531CE810C"
   : "0x986596ba2b3156A8a2A944fb0A82de134A6DB170"
 
+export const ARB_ABC_PRESALE = IS_PRODUCTION
+  ? ""
+  : "0x8fa47848D2a1EF283ffdBF8b3Dc0D1F1A06A94C3"
+
 export const ARB_LEGACY_GRAPHS = IS_PRODUCTION
   ? "https://api.thegraph.com/subgraphs/name/0xinsanity/abacusarbitrum"
   : "https://api.thegraph.com/subgraphs/name/0xinsanity/abacusarbitrumrinkeby"
