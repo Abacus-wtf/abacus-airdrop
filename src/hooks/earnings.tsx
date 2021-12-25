@@ -5,14 +5,13 @@ import { getContract } from "@config/utils"
 import { ARB_ABC_PRESALE } from "@config/constants"
 import ABC_PRESALE_ABI from "@config/contracts/ABC_PRESALE_ABI.json"
 import { useActiveWeb3React, useGeneralizedContractCall } from "@hooks/index"
-import { parseEther } from "ethers/lib/utils"
 
 export const useOnEarn = () => {
   const { account, library } = useActiveWeb3React()
   const { generalizedContractCall, isPending } = useGeneralizedContractCall()
 
   const onEarn = useCallback(
-    async (amount: string) => {
+    async (reset: () => void) => {
       let estimate
       let method: (...args: any) => Promise<TransactionResponse>
       let args: Array<BigNumber | number | string>
@@ -25,13 +24,15 @@ export const useOnEarn = () => {
         account
       )
 
-      method = presaleContract.claimProfitRetroactive
-      estimate = presaleContract.estimateGas.claimProfitRetroactive
-      args = [parseEther(amount)]
+      method = presaleContract.claimEarned
+      estimate = presaleContract.estimateGas.claimEarned
+      args = []
       value = null
 
       const txnCb = async (response: any) => {
         console.log(response)
+        await response.wait()
+        await reset()
       }
       await generalizedContractCall({
         method,

@@ -9,6 +9,7 @@ import ConnectWalletAlert from "@components/ConnectWalletAlert"
 import { VerticalContainer, MaxWidthItem } from "@sections/Earnings"
 import { ARB_ABC_PRESALE } from "@config/constants"
 import ABC_PRESALE_ABI from "@config/contracts/ABC_PRESALE_ABI.json"
+import { useGetCurrentNetwork } from "@state/application/hooks"
 
 const Whitelist: FunctionComponent = () => {
   const { account } = useActiveWeb3React()
@@ -16,6 +17,7 @@ const Whitelist: FunctionComponent = () => {
   const [purchaseVal, setPurchaseVal] = useState("")
   const [isLoading, setLoading] = useState(false)
   const getPresaleContract = useWeb3Contract(ABC_PRESALE_ABI)
+  const networkSymbol = useGetCurrentNetwork()
 
   const { onWhitelist, isPending } = useOnWhitelist()
 
@@ -27,10 +29,10 @@ const Whitelist: FunctionComponent = () => {
       setIsWhitelisted(whitelist)
       setLoading(false)
     }
-    if (account !== undefined && account !== null) {
+    if (networkSymbol === "AETH" && account !== undefined && account !== null) {
       loadData()
     }
-  }, [account, getPresaleContract])
+  }, [account, getPresaleContract, networkSymbol])
 
   if (!account) {
     return (
@@ -94,7 +96,7 @@ const Whitelist: FunctionComponent = () => {
                     alert("You inputted too high of a purchase amount")
                     return
                   }
-                  onWhitelist(purchaseVal)
+                  onWhitelist(purchaseVal, () => setIsWhitelisted(false))
                 }}
               >
                 {isPending ? "Pending..." : "Claim Airdrop"}

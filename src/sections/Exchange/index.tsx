@@ -10,6 +10,7 @@ import { VerticalContainer, MaxWidthItem } from "@sections/Earnings"
 import { ARB_ABC_PRESALE } from "@config/constants"
 import ABC_PRESALE_ABI from "@config/contracts/ABC_PRESALE_ABI.json"
 import { formatEther } from "ethers/lib/utils"
+import { useGetCurrentNetwork } from "@state/application/hooks"
 
 const Exchange: FunctionComponent = () => {
   const { account } = useActiveWeb3React()
@@ -17,21 +18,23 @@ const Exchange: FunctionComponent = () => {
   const [exchangeAmount, setExchangeAmount] = useState("")
   const [isLoading, setLoading] = useState(false)
   const getPresaleContract = useWeb3Contract(ABC_PRESALE_ABI)
+  const networkSymbol = useGetCurrentNetwork()
 
   const { onExchange, isPending } = useOnExchange()
 
+  const loadData = async () => {
+    setLoading(true)
+    const pricingSessionRead = getPresaleContract(ARB_ABC_PRESALE)
+    const earned = await pricingSessionRead.methods.won(account).call()
+    setTotalAmountPossible(formatEther(earned))
+    setLoading(false)
+  }
+
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true)
-      const pricingSessionRead = getPresaleContract(ARB_ABC_PRESALE)
-      const earned = await pricingSessionRead.methods.earned(account).call()
-      setTotalAmountPossible(formatEther(earned))
-      setLoading(false)
-    }
-    if (account !== undefined && account !== null) {
+    if (networkSymbol === "AETH" && account !== undefined && account !== null) {
       loadData()
     }
-  }, [account, getPresaleContract])
+  }, [account, getPresaleContract, networkSymbol])
 
   if (!account) {
     return (
@@ -86,7 +89,7 @@ const Exchange: FunctionComponent = () => {
                     alert("You tried to purchase more than you are alloted.")
                     return
                   }
-                  onExchange(exchangeAmount)
+                  onExchange(exchangeAmount, () => loadData())
                 }}
               >
                 {isPending ? "Pending..." : "Claim Airdrop"}

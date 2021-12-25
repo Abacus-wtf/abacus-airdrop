@@ -12,7 +12,7 @@ export const useOnExchange = () => {
   const { generalizedContractCall, isPending } = useGeneralizedContractCall()
 
   const onExchange = useCallback(
-    async (amount: string) => {
+    async (amount: string, reset: () => void) => {
       let estimate
       let method: (...args: any) => Promise<TransactionResponse>
       let args: Array<BigNumber | number | string>
@@ -24,13 +24,15 @@ export const useOnExchange = () => {
         library,
         account
       )
-      method = presaleContract.claimPresale
-      estimate = presaleContract.estimateGas.claimPresale
-      args = [parseEther(amount)]
-      value = null
+      method = presaleContract.claimProfitRetroactive
+      estimate = presaleContract.estimateGas.claimProfitRetroactive
+      args = []
+      value = parseEther(amount)
 
       const txnCb = async (response: any) => {
         console.log(response)
+        await response.wait()
+        await reset()
       }
       await generalizedContractCall({
         method,

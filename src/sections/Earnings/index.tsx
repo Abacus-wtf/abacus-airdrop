@@ -11,6 +11,7 @@ import styled from "styled-components"
 import { ARB_ABC_PRESALE } from "@config/constants"
 import ABC_PRESALE_ABI from "@config/contracts/ABC_PRESALE_ABI.json"
 import { formatEther } from "ethers/lib/utils"
+import { useGetCurrentNetwork } from "@state/application/hooks"
 
 export const VerticalContainer = styled.div`
   display: flex;
@@ -30,21 +31,28 @@ const Earnings: FunctionComponent = () => {
   const [earningsVal, setEarningsVal] = useState("")
   const [isLoading, setLoading] = useState(false)
   const getPresaleContract = useWeb3Contract(ABC_PRESALE_ABI)
+  const networkSymbol = useGetCurrentNetwork()
 
   const { onEarn, isPending } = useOnEarn()
 
+  const loadData = async () => {
+    setLoading(true)
+    const presaleRead = getPresaleContract(ARB_ABC_PRESALE)
+    const earned = await presaleRead.methods.earned(account).call()
+    setEarningsVal(formatEther(earned))
+    setLoading(false)
+  }
+
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true)
-      const presaleRead = getPresaleContract(ARB_ABC_PRESALE)
-      const earned = await presaleRead.methods.won(account).call()
-      setEarningsVal(formatEther(earned))
-      setLoading(false)
-    }
-    if (account !== undefined && account !== null && earningsVal === "") {
+    if (
+      networkSymbol === "AETH" &&
+      account !== undefined &&
+      account !== null &&
+      earningsVal === ""
+    ) {
       loadData()
     }
-  }, [account, getPresaleContract])
+  }, [account, getPresaleContract, networkSymbol])
 
   if (!account) {
     return (
@@ -89,7 +97,7 @@ const Earnings: FunctionComponent = () => {
                 style={{ width: "100%" }}
                 type="button"
                 onClick={() => {
-                  onEarn(earningsVal)
+                  onEarn(() => loadData())
                 }}
               >
                 {isPending ? "Pending..." : "Claim Airdrop"}

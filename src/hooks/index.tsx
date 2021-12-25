@@ -95,6 +95,7 @@ export const useGeneralizedContractCall = () => {
   const { account, chainId, library } = useActiveWeb3React()
   const toggleWalletModal = useToggleWalletModal()
   const [isPending, setIsPending] = useState(false)
+  const networkSymbol = useGetCurrentNetwork()
 
   const generalizedContractCall = useCallback(
     async ({
@@ -110,10 +111,14 @@ export const useGeneralizedContractCall = () => {
       value: BigNumber | null
       cb: (response: any) => void
     }) => {
-      if (account === undefined || account === null) {
+      if (
+        account === undefined ||
+        account === null ||
+        networkSymbol !== "AETH"
+      ) {
         toggleWalletModal()
         alert(
-          "Error processing your request, please login to an Ethereum Wallet provider."
+          "Error processing your request, please login to an Ethereum Wallet provider and ensure you are on the Arbitrum network."
         )
         return
       }
@@ -141,7 +146,7 @@ export const useGeneralizedContractCall = () => {
           console.error(error)
         })
     },
-    [account, chainId, library, toggleWalletModal]
+    [account, chainId, library, toggleWalletModal, networkSymbol]
   )
 
   return {
