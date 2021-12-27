@@ -38,7 +38,7 @@ const Earnings: FunctionComponent = () => {
   const loadData = async () => {
     setLoading(true)
     const presaleRead = getPresaleContract(ARB_ABC_PRESALE)
-    const earned = await presaleRead.methods.earned(account).call()
+    const earned = await presaleRead.methods.getTokensEarned(account).call()
     setEarningsVal(formatEther(earned))
     setLoading(false)
   }
