@@ -25,7 +25,7 @@ const Exchange: FunctionComponent = () => {
     setLoading(true)
     const pricingSessionRead = getPresaleContract(ARB_ABC_PRESALE)
     const earned = await pricingSessionRead.methods.won(account).call()
-    setTotalAmountPossible(earned)
+    setTotalAmountPossible(`${(Number(earned) / 100) * 0.0025}`)
     setLoading(false)
   }
 
@@ -62,7 +62,7 @@ const Exchange: FunctionComponent = () => {
         <HorizontalListGroup>
           <MaxWidthItem>
             <InputWithTitleAndButton
-              title={`Exchange up to ${totalAmountPossible} $ABC`}
+              title={`Exchange up to ${totalAmountPossible} ETH`}
               id="purchaseAmount"
               placeholder="Enter purchase amount in $ABC"
               value={exchangeAmount}

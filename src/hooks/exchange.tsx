@@ -28,7 +28,7 @@ export const useOnExchange = () => {
       estimate = presaleContract.estimateGas.claimProfitRetroactive
       args = []
       value = parseEther(amount)
-
+      console.log(value)
       const txnCb = async (response: any) => {
         console.log(response)
         await response.wait()
