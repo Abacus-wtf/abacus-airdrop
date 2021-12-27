@@ -9,7 +9,6 @@ import ConnectWalletAlert from "@components/ConnectWalletAlert"
 import { VerticalContainer, MaxWidthItem } from "@sections/Earnings"
 import { ARB_ABC_PRESALE } from "@config/constants"
 import ABC_PRESALE_ABI from "@config/contracts/ABC_PRESALE_ABI.json"
-import { formatEther } from "ethers/lib/utils"
 import { useGetCurrentNetwork } from "@state/application/hooks"
 
 const Exchange: FunctionComponent = () => {
@@ -26,7 +25,7 @@ const Exchange: FunctionComponent = () => {
     setLoading(true)
     const pricingSessionRead = getPresaleContract(ARB_ABC_PRESALE)
     const earned = await pricingSessionRead.methods.won(account).call()
-    setTotalAmountPossible(formatEther(earned))
+    setTotalAmountPossible(earned)
     setLoading(false)
   }
 
