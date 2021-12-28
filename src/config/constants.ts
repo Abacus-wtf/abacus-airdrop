@@ -94,7 +94,7 @@ export const ARB_ABC_PRICING_SESSION_ADDRESS_LEGACY = IS_PRODUCTION
 
 export const ARB_ABC_PRESALE = IS_PRODUCTION
   ? ""
-  : "0xE3Afb73590C35747F955DA4fCe93DEC946669be2"
+  : "0xa9aa4808eb09a7970FCc664a6faDC0011Fb0D96f"
 
 export const ARB_LEGACY_GRAPHS = IS_PRODUCTION
   ? "https://api.thegraph.com/subgraphs/name/0xinsanity/abacusarbitrum"
