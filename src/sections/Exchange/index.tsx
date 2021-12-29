@@ -64,7 +64,7 @@ const Exchange: FunctionComponent = () => {
             <InputWithTitleAndButton
               title={`Exchange up to ${totalAmountPossible} ETH`}
               id="purchaseAmount"
-              placeholder="Enter purchase amount in $ABC"
+              placeholder="Enter purchase amount in ETH"
               value={exchangeAmount}
               onChange={(e) => setExchangeAmount(e.target.value)}
               buttonText="Max"
